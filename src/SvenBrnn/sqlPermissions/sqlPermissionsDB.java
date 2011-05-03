@@ -100,12 +100,19 @@ public class sqlPermissionsDB {
         sqlArray[1] = "CREATE TABLE IF NOT EXISTS perm_worlds ("
                 + "id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,"
                 + "world VARCHAR(255) NULL,"
+                + "copies VARCHAR(255) NULL,"
+                + "system VARCHAR(255) NULL,"
                 + "PRIMARY KEY(id)"
                 + ")";
         sqlArray[2] = "CREATE TABLE IF NOT EXISTS perm_groups ("
                 + "world INTEGER UNSIGNED NOT NULL,"
                 + "id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,"
                 + "name VARCHAR(255) NULL,"
+                + "default VARCHAR(4) NULL,"
+                + "prefix VARCHAR(255) NULL,"
+                + "sufix VARCHAR(255) NULL,"
+                + "build VARCHAR(255) NULL,"
+                + "instances VARCHAR(255) NULL,"
                 + "PRIMARY KEY(id),"
                 + "INDEX perm_groups_FKIndex1(world),"
                 + "FOREIGN KEY(world)"
@@ -121,7 +128,7 @@ public class sqlPermissionsDB {
                 + ")";
         sqlArray[4] = "CREATE TABLE IF NOT EXISTS perm_users ("
                 + "id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,"
-                + " grp INTEGER UNSIGNED NOT NULL,"
+                + "grp INTEGER UNSIGNED NOT NULL,"
                 + "login VARCHAR(255) NULL,"
                 + "pass VARCHAR(255) NULL,"
                 + "PRIMARY KEY(id),"
@@ -151,6 +158,9 @@ public class sqlPermissionsDB {
         }
         if (executeQuery("SELECT value FROM perm_config WHERE param='sqlVersion'").length == 0) {
             executeChangeQuery("INSERT INTO perm_config(param, value) VALUES('sqlVersion', '0.1')");
+        }
+        if (executeQuery("SELECT value FROM perm_config WHERE param='lastPermVersion'").length == 0) {
+            executeChangeQuery("INSERT INTO perm_config(param, value) VALUES('lastPermVersion', now())");
         }
     }
 }

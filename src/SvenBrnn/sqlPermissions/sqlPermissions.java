@@ -20,6 +20,8 @@ public class sqlPermissions extends JavaPlugin {
     private PermissionHandler Permissions;
     public sqlPermissionsConfig config;
     public sqlPermissionsDB database;
+    public sqlPermissionsPermisionEditor permEdit;
+    public sqlPermissionsWorker worker;
     private boolean enabled = true;
 
     public void onEnable() {
@@ -30,6 +32,11 @@ public class sqlPermissions extends JavaPlugin {
         }
         if (enabled) {
             database = new sqlPermissionsDB(this);
+        }
+        if (enabled) {
+            permEdit = new sqlPermissionsPermisionEditor(this);
+            worker = new sqlPermissionsWorker(this);
+            worker.start();
         }
         if (enabled) {
             PluginDescriptionFile pdfFile = this.getDescription();
