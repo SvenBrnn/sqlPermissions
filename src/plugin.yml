@@ -1,5 +1,3 @@
 name: sqlPermissions
-
-main: SvenBrnn.sqlPermissions
-
+main: SvenBrnn.sqlPermissions.sqlPermissions
 version: 0.1

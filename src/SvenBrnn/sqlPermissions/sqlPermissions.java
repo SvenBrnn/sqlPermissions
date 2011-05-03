@@ -1,7 +1,10 @@
 package SvenBrnn.sqlPermissions;
 
+import com.nijiko.permissions.PermissionHandler;
+import com.nijikokun.bukkit.Permissions.Permissions;
 import java.util.HashMap;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
@@ -12,27 +15,28 @@ import org.bukkit.plugin.PluginManager;
  * @author SvenBrnn
  */
 public class sqlPermissions extends JavaPlugin {
-    private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>(); 
+
+    private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
+    private PermissionHandler Permissions;
+    public sqlPermissionsConfig config;
+    private boolean enabled = true;
 
     public void onEnable() {
-        // TODO: Place any custom enable code here including the registration of any events
-
-        // Register our events
         PluginManager pm = getServer().getPluginManager();
-       
-
-        // EXAMPLE: Custom code, here we just output some info so we can check all is well
-        PluginDescriptionFile pdfFile = this.getDescription();
-        System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
+        setupPermissions();
+        if (enabled) {
+            config = new sqlPermissionsConfig(this);
+        }
+        if (enabled) {
+            PluginDescriptionFile pdfFile = this.getDescription();
+            System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
+        }
     }
+
     public void onDisable() {
-        // TODO: Place any custom disable code here
-
-        // NOTE: All registered events are automatically unregistered when a plugin is disabled
-
-        // EXAMPLE: Custom code, here we just output some info so we can check all is well
-        System.out.println("Goodbye world!");
+        System.out.println("sqlPermissions disabled!");
     }
+
     public boolean isDebugging(final Player player) {
         if (debugees.containsKey(player)) {
             return debugees.get(player);
@@ -41,8 +45,30 @@ public class sqlPermissions extends JavaPlugin {
         }
     }
 
+    private void setupPermissions() {
+        Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
+
+        if (this.Permissions == null) {
+            if (test != null) {
+                this.Permissions = ((Permissions) test).getHandler();
+                System.out.println("[sqlPermissions] Permission system detected!");
+            } else {
+                System.out.println("[sqlPermissions] Permission system not detected.");
+                disableSqlPermission();
+            }
+        } else {
+            System.out.println("[sqlPermissions] Permission system not detected.");
+            disableSqlPermission();
+        }
+    }
+
+    public void disableSqlPermission() {
+        PluginManager pm = getServer().getPluginManager();
+        pm.disablePlugin(this);
+        enabled = false;
+    }
+
     public void setDebugging(final Player player, final boolean value) {
         debugees.put(player, value);
     }
 }
-
