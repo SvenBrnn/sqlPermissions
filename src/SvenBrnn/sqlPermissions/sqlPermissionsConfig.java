@@ -39,6 +39,7 @@ public class sqlPermissionsConfig {
     }
 
     private void readConfig() {
+        config.load();
         Boolean setMySQL = (Boolean) config.getProperty("config.i.have.set.the.mysql.data");
         if(setMySQL == null || !setMySQL)
         {
@@ -67,5 +68,27 @@ public class sqlPermissionsConfig {
         config.setProperty("config.mysql.password", "changeme");
         config.setProperty("config.mysql.database", "permissions");
         config.setProperty("config.i.have.set.the.mysql.data", false);
+        config.save();
+    }
+
+    public String getSQLHost()
+    {
+        return sqlHost;
+    }
+    public String getSQLPort()
+    {
+        return sqlPort;
+    }
+    public String getSQLUser()
+    {
+        return sqlUser;
+    }
+    public String getSQLPassword()
+    {
+        return sqlPassword;
+    }
+    public String getSQLDatabase()
+    {
+        return sqlDatabase;
     }
 }

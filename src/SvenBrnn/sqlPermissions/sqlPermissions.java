@@ -19,6 +19,7 @@ public class sqlPermissions extends JavaPlugin {
     private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
     private PermissionHandler Permissions;
     public sqlPermissionsConfig config;
+    public sqlPermissionsDB database;
     private boolean enabled = true;
 
     public void onEnable() {
@@ -26,6 +27,9 @@ public class sqlPermissions extends JavaPlugin {
         setupPermissions();
         if (enabled) {
             config = new sqlPermissionsConfig(this);
+        }
+        if (enabled) {
+            database = new sqlPermissionsDB(this);
         }
         if (enabled) {
             PluginDescriptionFile pdfFile = this.getDescription();
