@@ -6,6 +6,8 @@ package SvenBrnn.sqlPermissions;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.World;
 
 /**
@@ -28,13 +30,27 @@ public class sqlPermissionsWorker extends Thread {
     }
 
     public void run() {
-        while(!stoprequested)
-        {
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException ex) {
+            //Logger.getLogger(sqlPermissionsWorker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        while (!stoprequested) {
             List<World> worldList = plugin.getServer().getWorlds();
             Iterator<World> worlds = worldList.iterator();
-            while(worlds.hasNext())
-            {
-                World wo = worlds.next();
+            while (worlds.hasNext()) {
+                try {
+                    World wo = worlds.next();
+                    System.out.println("[sqlPermissons] Reading Permission file: " + wo.getName());
+                    plugin.permEdit.loadPermissionsToDatabase(wo.getName());
+                } catch (Exception ex) {
+                    Logger.getLogger(sqlPermissionsWorker.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            try {
+                Thread.sleep(300000);
+            } catch (InterruptedException ex) {
+                //Logger.getLogger(sqlPermissionsWorker.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
