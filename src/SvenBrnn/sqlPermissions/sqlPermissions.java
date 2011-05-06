@@ -17,7 +17,7 @@ import org.bukkit.plugin.PluginManager;
 public class sqlPermissions extends JavaPlugin {
 
     private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
-    private PermissionHandler Permissions;
+    public PermissionHandler Permissions;
     public sqlPermissionsConfig config;
     public sqlPermissionsDB database;
     public sqlPermissionsPermisionEditor permEdit;

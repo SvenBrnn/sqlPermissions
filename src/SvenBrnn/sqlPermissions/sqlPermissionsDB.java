@@ -196,8 +196,8 @@ public class sqlPermissionsDB {
         if (executeQuery("SELECT value FROM perm_config WHERE param='sqlVersion'").length == 0) {
             executeChangeQuery("INSERT INTO perm_config(param, value) VALUES('sqlVersion', '0.1')");
         }
-        if (executeQuery("SELECT value FROM perm_config WHERE param='lastPermVersion'").length == 0) {
-            executeChangeQuery("INSERT INTO perm_config(param, value) VALUES('lastPermVersion', now())");
+        if (executeQuery("SELECT value FROM perm_config WHERE param='lastDBChange'").length == 0) {
+            executeChangeQuery("INSERT INTO perm_config(param, value) VALUES('lastDBChange', FROM_UNIXTIME(0))");
         }
         //plugin.disableSqlPermission();
     }
