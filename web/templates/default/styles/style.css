@@ -1,0 +1,45 @@
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+}
+
+table.tmplTable {
+    height: 100%;
+}
+td.header {
+    text-align: center;
+    height: 50px;
+}
+
+td.footer {
+    text-align: center;
+    height: 30px;
+}
+
+td.left {
+     vertical-align: top;
+}
+
+td.main {
+    vertical-align: top;
+}
+
+td.error {
+    color: red;
+    border: 1px solid red;
+    font-weight: bold;
+    background: #FFDDDD;
+}
+
+div.hasPerm {
+    color: green;
+}
+
+td.loginMain {
+    vertical-align: middle;
+    text-align: center;
+}
