@@ -90,21 +90,27 @@ public class sqlPermissionsDB {
     }
 
     private void createDatabase() throws ClassNotFoundException, SQLException {
-        String[] sqlArray = new String[8];
+        String[] sqlArray = new String[9];
         sqlArray[0] = "CREATE TABLE IF NOT EXISTS perm_permissions ("
                 + "id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,"
                 + "name VARCHAR(255) NULL,"
                 + "description VARCHAR(255) NULL,"
                 + "PRIMARY KEY(id)"
                 + ")";
-        sqlArray[1] = "CREATE TABLE IF NOT EXISTS perm_worlds ("
+        sqlArray[1] = "CREATE TABLE IF NOT EXISTS perm_webusers ("
+                + "id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,"
+                + "username VARCHAR(255) NOT NULL,"
+                + "password VARCHAR(255) NOT NULL,"
+                + "PRIMARY KEY(id)"
+                + ")";
+        sqlArray[2] = "CREATE TABLE IF NOT EXISTS perm_worlds ("
                 + "id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,"
                 + "world VARCHAR(255) NULL,"
                 + "copies VARCHAR(255) NULL,"
                 + "system VARCHAR(255) NULL,"
                 + "PRIMARY KEY(id)"
                 + ")";
-        sqlArray[2] = "CREATE TABLE IF NOT EXISTS perm_groups ("
+        sqlArray[3] = "CREATE TABLE IF NOT EXISTS perm_groups ("
                 + "world INTEGER UNSIGNED NOT NULL,"
                 + "id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,"
                 + "name VARCHAR(255) NULL,"
@@ -120,13 +126,13 @@ public class sqlPermissionsDB {
                 + "    ON DELETE NO ACTION"
                 + "    ON UPDATE NO ACTION"
                 + ")";
-        sqlArray[3] = "CREATE TABLE IF NOT EXISTS perm_config ("
+        sqlArray[4] = "CREATE TABLE IF NOT EXISTS perm_config ("
                 + "id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,"
                 + "param VARCHAR(255) NULL,"
                 + "value VARCHAR(255) NULL,"
                 + "PRIMARY KEY(id)"
                 + ")";
-        sqlArray[4] = "CREATE TABLE IF NOT EXISTS perm_instances ("
+        sqlArray[5] = "CREATE TABLE IF NOT EXISTS perm_instances ("
                 + "grpID INTEGER UNSIGNED NOT NULL,"
                 + "refTo INTEGER UNSIGNED NOT NULL,"
                 + "PRIMARY KEY(grpID, refTo),"
@@ -141,7 +147,7 @@ public class sqlPermissionsDB {
                 + "    ON DELETE NO ACTION"
                 + "    ON UPDATE NO ACTION"
                 + ")";
-        sqlArray[5] = "CREATE TABLE IF NOT EXISTS perm_users ("
+        sqlArray[6] = "CREATE TABLE IF NOT EXISTS perm_users ("
                 + "id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,"
                 + "grp INTEGER UNSIGNED NOT NULL,"
                 + "world INTEGER UNSIGNED NOT NULL,"
@@ -159,7 +165,7 @@ public class sqlPermissionsDB {
                 + "     ON DELETE NO ACTION"
                 + "     ON UPDATE NO ACTION"
                 + ")";
-        sqlArray[6] = "CREATE TABLE IF NOT EXISTS perm_grp_to_perm ("
+        sqlArray[7] = "CREATE TABLE IF NOT EXISTS perm_grp_to_perm ("
                 + "grpID INTEGER UNSIGNED NOT NULL,"
                 + "permID INTEGER UNSIGNED NOT NULL,"
                 + "PRIMARY KEY(grpID, permID),"
@@ -174,7 +180,7 @@ public class sqlPermissionsDB {
                 + "    ON DELETE NO ACTION"
                 + "    ON UPDATE NO ACTION"
                 + ")";
-        sqlArray[7] = "CREATE TABLE IF NOT EXISTS perm_user_to_perm ("
+        sqlArray[8] = "CREATE TABLE IF NOT EXISTS perm_user_to_perm ("
                 + "usrID INTEGER UNSIGNED NOT NULL,"
                 + "permID INTEGER UNSIGNED NOT NULL,"
                 + "PRIMARY KEY(usrID, permID),"
@@ -198,6 +204,10 @@ public class sqlPermissionsDB {
         }
         if (executeQuery("SELECT value FROM perm_config WHERE param='lastDBChange'").length == 0) {
             executeChangeQuery("INSERT INTO perm_config(param, value) VALUES('lastDBChange', FROM_UNIXTIME(0))");
+        }
+        if(executeQuery("SELECT * FROM perm_webusers WHERE 1").length == 0)
+        {
+            executeChangeQuery("INSERT INTO perm_webusers(username, password) VALUES('admin', md5('password'))");
         }
         //plugin.disableSqlPermission();
     }
