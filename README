@@ -1,1 +1,36 @@
-Readme Init
+Puplished under GNU General Public License
+
+For any damage that may arise from my plugin, I am not responsible.
+
+REQUIREMENTS:
+PLUGIN AND WEBPAGE:
+- MySQL
+PLUGIN:
+- Nijikokun/TheYeti's permissions plugin for Bukkit
+WEBPAGE:
+- Webserver with PHP5
+
+INSTALL PLUGIN:
+1. Copy the sqlPermissions.jar into your Bukkit Plugin folder
+2. Restart Your Server
+3. Go to plugins/sqlPermission and edit the config.yml.
+4. Restart your Server Again
+
+
+INSTALL WEBPAGE:
+1. Copy all Webfiles into your Server Directory
+2. go to includes and open the config.php
+3. set the config for the Database connection (same as the Plugin)
+4. Standardlogin is "admin" and "password"
+
+FUNCTIONS:
+- Loads the Permissions file into the DB if it is newer then the DB entrys
+- Writes the DB entrys into the Permission files if they are newer
+- Checks the DB and Files every 5 minutes for changes
+
+CHANGELOG:
+Version 0.1:
+- init the Plugin
+
+PLANNED:
+- settings for the update delay
