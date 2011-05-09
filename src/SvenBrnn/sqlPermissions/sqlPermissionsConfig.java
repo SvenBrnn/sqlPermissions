@@ -20,7 +20,6 @@ public class sqlPermissionsConfig {
     private String sqlUser;
     private String sqlPassword;
     private String cfgVersion;
-
     private String syncWait;
     private Configuration config;
     private String file;
@@ -31,8 +30,7 @@ public class sqlPermissionsConfig {
         file = "plugins/sqlPermissions/config.yml";
         cfgFile = new File(file);
         this.config = new Configuration(cfgFile);
-        if(!cfgFile.exists())
-        {
+        if (!cfgFile.exists()) {
             createConfig();
         }
         readConfig();
@@ -41,8 +39,7 @@ public class sqlPermissionsConfig {
     private void readConfig() {
         config.load();
         Boolean setMySQL = (Boolean) config.getProperty("config.i.have.set.the.mysql.data");
-        if(setMySQL == null || !setMySQL)
-        {
+        if (setMySQL == null || !setMySQL) {
             System.out.println("[sqlPermissions] Please set the MySQL Data first.");
             plugin.disableSqlPermission();
         }
@@ -53,15 +50,17 @@ public class sqlPermissionsConfig {
         sqlPassword = (String) config.getProperty("config.mysql.password");
         sqlDatabase = (String) config.getProperty("config.mysql.database");
 
-        if(cfgVersion == null || sqlHost == null || sqlPort == null ||  sqlUser == null  || sqlPassword == null || sqlDatabase == null)
-        {
-           System.out.println("[sqlPermissions] Error in config file.");
-           plugin.disableSqlPermission();
+        if (cfgVersion != null && cfgVersion.equals("0.1")) {
+            updateVersion();
+        }
+        if (cfgVersion == null || sqlHost == null || sqlPort == null || sqlUser == null || sqlPassword == null || sqlDatabase == null) {
+            System.out.println("[sqlPermissions] Error in config file.");
+            plugin.disableSqlPermission();
         }
     }
 
     private void createConfig() {
-        config.setProperty("config.configVersion", "0.1");
+        config.setProperty("config.configVersion", "0.2");
         config.setProperty("config.mysql.host", "localhost");
         config.setProperty("config.mysql.port", "3306");
         config.setProperty("config.mysql.user", "permissions");
@@ -71,24 +70,29 @@ public class sqlPermissionsConfig {
         config.save();
     }
 
-    public String getSQLHost()
-    {
+    public String getSQLHost() {
         return sqlHost;
     }
-    public String getSQLPort()
-    {
+
+    public String getSQLPort() {
         return sqlPort;
     }
-    public String getSQLUser()
-    {
+
+    public String getSQLUser() {
         return sqlUser;
     }
-    public String getSQLPassword()
-    {
+
+    public String getSQLPassword() {
         return sqlPassword;
     }
-    public String getSQLDatabase()
-    {
+
+    public String getSQLDatabase() {
         return sqlDatabase;
+    }
+
+    private void updateVersion() {
+        config.load();
+        config.setProperty("config.configVersion", "0.2");
+        config.save();
     }
 }

@@ -442,10 +442,17 @@ public class sqlPermissionsPermisionEditor {
         }
     }
 
-    private String escapeString(String str)
-    {
-        str.replaceAll("\'", "\\'");
-        str.replaceAll("\"", "\\\"");
+    private String escapeString(String str) {
+        if (str != null) {
+            String[] split = str.split("'");
+            str = "";
+            str = split[0];
+            for(int i = 1; i < split.length; i++)
+            {
+                str += "\\'" + split[i];
+            }
+            //System.out.println("[DEBUG] " + str);
+        }
         return str;
     }
 }
