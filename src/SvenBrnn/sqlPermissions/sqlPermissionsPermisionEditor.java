@@ -48,14 +48,16 @@ public class sqlPermissionsPermisionEditor {
             grpID = checkAndAddGroup((String) grp, worldID, cfg);
             if (grpID != -1) {
                 List permList = cfg.getList("groups." + grp + ".permissions");
-                Iterator perms = permList.iterator();
-                String query = "DELETE FROM perm_grp_to_perm WHERE grpID='" + grpID + "'";
-                plugin.database.executeChangeQuery(query);
-                while (perms.hasNext()) {
-                    Object perm = (String) perms.next();
-                    checkAndAddPerm((String) perm, grpID, cfg);
+                if (permList != null) {
+                    Iterator perms = permList.iterator();
+                    String query = "DELETE FROM perm_grp_to_perm WHERE grpID='" + grpID + "'";
+                    plugin.database.executeChangeQuery(query);
+                    while (perms.hasNext()) {
+                        Object perm = (String) perms.next();
+                        checkAndAddPerm((String) perm, grpID, cfg);
+                    }
+                    //System.out.println("[sqlPermissions][DEBUG] Group " + grp + " is in DB now!");
                 }
-                //System.out.println("[sqlPermissions][DEBUG] Group " + grp + " is in DB now!");
             }
         }
 
@@ -447,8 +449,7 @@ public class sqlPermissionsPermisionEditor {
             String[] split = str.split("'");
             str = "";
             str = split[0];
-            for(int i = 1; i < split.length; i++)
-            {
+            for (int i = 1; i < split.length; i++) {
                 str += "\\'" + split[i];
             }
             //System.out.println("[DEBUG] " + str);
