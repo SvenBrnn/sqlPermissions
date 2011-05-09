@@ -94,13 +94,14 @@ public class sqlPermissionsPermisionEditor {
 
             Boolean defBool = (Boolean) cfg.getProperty("groups." + grp + ".default");
             String def;
-            if (defBool!=null && defBool) {
+            if (defBool != null && defBool) {
                 def = "true";
             } else {
                 def = "false";
             }
             String instance;
             Object ins = cfg.getProperty("groups." + grp + ".inheritance");
+            String rank = (String) cfg.getProperty("groups." + grp + ".rank");
             String sufix = (String) cfg.getProperty("groups." + grp + ".info.sufix");
             String prefix = (String) cfg.getProperty("groups." + grp + ".info.prefix");
             Boolean buildBool = (Boolean) cfg.getProperty("groups." + grp + ".info.build");
@@ -112,7 +113,11 @@ public class sqlPermissionsPermisionEditor {
             }
 
             if (res.length > 0) {
-                query = "UPDATE perm_groups SET name='" + this.escapeString(grp) + "', world='" + world + "', def='" + def + "', prefix='" + this.escapeString(prefix) + "', sufix='" + this.escapeString(sufix) + "', build='" + build + "' WHERE id='" + res[0][0] + "'";
+                if (rank != null) {
+                    query = "UPDATE perm_groups SET name='" + this.escapeString(grp) + "', world='" + world + "', def='" + def + "', prefix='" + this.escapeString(prefix) + "', sufix='" + this.escapeString(sufix) + "', build='" + build + "', rank='" + rank + "' WHERE id='" + res[0][0] + "'";
+                } else {
+                    query = "UPDATE perm_groups SET name='" + this.escapeString(grp) + "', world='" + world + "', def='" + def + "', prefix='" + this.escapeString(prefix) + "', sufix='" + this.escapeString(sufix) + "', build='" + build + "' WHERE id='" + res[0][0] + "'";
+                }
                 //System.out.println("[DEBUG] " + query);
                 plugin.database.executeChangeQuery(query);
                 int gID = new Integer(res[0][0]);
@@ -153,7 +158,12 @@ public class sqlPermissionsPermisionEditor {
                 return gID;
             }
 
-            query = "INSERT INTO perm_groups(name, world, def, prefix, sufix, build) VALUES('" + this.escapeString(grp) + "','" + world + "','" + def + "','" + prefix + "','" + sufix + "','" + build + "')";
+            if (rank != null) {
+                query = "INSERT INTO perm_groups(name, world, def, prefix, sufix, build, rank) VALUES('" + this.escapeString(grp) + "','" + world + "','" + def + "','" + prefix + "','" + sufix + "','" + build + "','" + rank + "')";
+            } else {
+                query = "INSERT INTO perm_groups(name, world, def, prefix, sufix, build) VALUES('" + this.escapeString(grp) + "','" + world + "','" + def + "','" + prefix + "','" + sufix + "','" + build + "')";
+            }
+
             //System.out.println("[DEBUG] " + query);
             plugin.database.executeChangeQuery(query);
 
@@ -393,6 +403,9 @@ public class sqlPermissionsPermisionEditor {
                 cfg.setProperty("groups." + groupArr[i][2] + ".info.build", true);
             } else {
                 cfg.setProperty("groups." + groupArr[i][2] + ".info.build", false);
+            }
+            if (groupArr[i][7]!=null && !groupArr[i][7].equals("")) {
+                cfg.setProperty("groups." + groupArr[i][2] + ".rank", new Integer(groupArr[i][7]));
             }
 
             int grpID = new Integer(groupArr[i][1]);

@@ -127,6 +127,7 @@ public class sqlPermissionsDB {
                 + "prefix VARCHAR(255) NULL,"
                 + "sufix VARCHAR(255) NULL,"
                 + "build VARCHAR(255) NULL,"
+                + "rank int(11) NULL,"
                 //+ "instances VARCHAR(255) NULL,"
                 + "PRIMARY KEY(id),"
                 + "INDEX perm_groups_FKIndex1(world),"
@@ -209,7 +210,7 @@ public class sqlPermissionsDB {
             executeChangeQuery(sql);
         }
         if (executeQuery("SELECT value FROM perm_config WHERE param='sqlVersion'").length == 0) {
-            executeChangeQuery("INSERT INTO perm_config(param, value) VALUES('sqlVersion', '0.1')");
+            executeChangeQuery("INSERT INTO perm_config(param, value) VALUES('sqlVersion', '0.2')");
         }
         if (executeQuery("SELECT value FROM perm_config WHERE param='lastDBChange'").length == 0) {
             executeChangeQuery("INSERT INTO perm_config(param, value) VALUES('lastDBChange', FROM_UNIXTIME(0))");
@@ -217,6 +218,20 @@ public class sqlPermissionsDB {
         if (executeQuery("SELECT * FROM perm_webusers WHERE 1").length == 0) {
             executeChangeQuery("INSERT INTO perm_webusers(username, password) VALUES('admin', md5('password'))");
         }
+        String[][] ret = executeQuery("SELECT value FROM perm_config WHERE param='sqlVersion'");
+        if (ret.length > 0) {
+            if (ret[0][0].equals("0.1")) {
+                updateFrom01To02();
+            }
+        }
         //plugin.disableSqlPermission();
+        //plugin.disableSqlPermission();
+    }
+
+    private void updateFrom01To02() throws SQLException, ClassNotFoundException {
+            System.out.println("[sqlPermissions] Updating Database from 0.1 to 0.2!");
+            String query = "ALTER TABLE perm_groups add rank int(11)";
+            executeChangeQuery(query);
+            executeChangeQuery("UPDATE perm_config SET value='0.2' WHERE param='sqlVersion'");
     }
 }
