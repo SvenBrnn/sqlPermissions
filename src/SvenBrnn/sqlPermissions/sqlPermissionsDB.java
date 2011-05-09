@@ -11,6 +11,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,6 +32,7 @@ public class sqlPermissionsDB {
 
     private void tryConnectAndCreateDB() {
         try {
+            this.conOpen();
             createDatabase();
         } catch (ClassNotFoundException ex) {
             System.out.println("[sqlPermissions] Error while Trying to connect to Database:");
@@ -40,20 +43,28 @@ public class sqlPermissionsDB {
         }
     }
 
-    private void conOpen()
+    public void conOpen()
             throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
         con = (Connection) DriverManager.getConnection("jdbc:mysql://" + plugin.config.getSQLHost() + ":" + plugin.config.getSQLPort() + "/" + plugin.config.getSQLDatabase(), plugin.config.getSQLUser(), plugin.config.getSQLPassword());
     }
 
-    private void conClose()
+    public void conClose()
             throws SQLException {
         con.close();
+        while (!con.isClosed()) {
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException ex) {
+                //Logger.getLogger(sqlPermissionsDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        con = null;
     }
 
     public String[][] executeQuery(String query)
             throws SQLException, ClassNotFoundException {
-        conOpen();
+        //conOpen();
         st = (Statement) con.createStatement();
         rs = st.executeQuery(query);
         ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
@@ -77,16 +88,14 @@ public class sqlPermissionsDB {
 
         }
 
-        conClose();
+        //conClose();
         return strArr;
     }
 
     public void executeChangeQuery(String query)
             throws SQLException, ClassNotFoundException {
-        conOpen();
         st = (Statement) con.createStatement();
         st.executeUpdate(query);
-        conClose();
     }
 
     private void createDatabase() throws ClassNotFoundException, SQLException {
@@ -205,8 +214,7 @@ public class sqlPermissionsDB {
         if (executeQuery("SELECT value FROM perm_config WHERE param='lastDBChange'").length == 0) {
             executeChangeQuery("INSERT INTO perm_config(param, value) VALUES('lastDBChange', FROM_UNIXTIME(0))");
         }
-        if(executeQuery("SELECT * FROM perm_webusers WHERE 1").length == 0)
-        {
+        if (executeQuery("SELECT * FROM perm_webusers WHERE 1").length == 0) {
             executeChangeQuery("INSERT INTO perm_webusers(username, password) VALUES('admin', md5('password'))");
         }
         //plugin.disableSqlPermission();

@@ -2,7 +2,10 @@ package SvenBrnn.sqlPermissions;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -74,9 +77,14 @@ public class sqlPermissions extends JavaPlugin {
     }
 
     public void disableSqlPermission() {
-        PluginManager pm = getServer().getPluginManager();
-        pm.disablePlugin(this);
-        enabled = false;
+        try {
+            PluginManager pm = getServer().getPluginManager();
+            pm.disablePlugin(this);
+            enabled = false;
+            database.conClose();
+        } catch (SQLException ex) {
+            //Logger.getLogger(sqlPermissions.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void setDebugging(final Player player, final boolean value) {

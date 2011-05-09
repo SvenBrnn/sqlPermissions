@@ -141,7 +141,7 @@ class sqlDatabase {
 
     public function cleanStatement($statement)
     {
-        return mysql_real_escape_string($statement);
+        return mysql_escape_string($statement);
     }
 }
 

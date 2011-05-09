@@ -94,7 +94,7 @@ public class sqlPermissionsPermisionEditor {
 
             Boolean defBool = (Boolean) cfg.getProperty("groups." + grp + ".default");
             String def;
-            if (defBool) {
+            if (defBool!=null && defBool) {
                 def = "true";
             } else {
                 def = "false";
@@ -105,7 +105,7 @@ public class sqlPermissionsPermisionEditor {
             String prefix = (String) cfg.getProperty("groups." + grp + ".info.prefix");
             Boolean buildBool = (Boolean) cfg.getProperty("groups." + grp + ".info.build");
             String build;
-            if (buildBool) {
+            if (buildBool != null && buildBool) {
                 build = "true";
             } else {
                 build = "false";
