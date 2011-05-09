@@ -83,7 +83,7 @@ public class sqlPermissionsPermisionEditor {
 
     private int checkAndAddGroup(String grp, int world, Configuration cfg) throws Exception {
         try {
-            String query = "SELECT id FROM perm_groups WHERE name='" + grp + "' AND world='" + world + "'";
+            String query = "SELECT id FROM perm_groups WHERE name='" + this.escapeString(grp) + "' AND world='" + world + "'";
             String[][] res = plugin.database.executeQuery(query);
 
             Boolean defBool = (Boolean) cfg.getProperty("groups." + grp + ".default");
@@ -106,7 +106,7 @@ public class sqlPermissionsPermisionEditor {
             }
 
             if (res.length > 0) {
-                query = "UPDATE perm_groups SET name='" + grp + "', world='" + world + "', def='" + def + "', prefix='" + prefix + "', sufix='" + sufix + "', build='" + build + "' WHERE id='" + res[0][0] + "'";
+                query = "UPDATE perm_groups SET name='" + this.escapeString(grp) + "', world='" + world + "', def='" + def + "', prefix='" + this.escapeString(prefix) + "', sufix='" + this.escapeString(sufix) + "', build='" + build + "' WHERE id='" + res[0][0] + "'";
                 //System.out.println("[DEBUG] " + query);
                 plugin.database.executeChangeQuery(query);
                 int gID = new Integer(res[0][0]);
@@ -147,11 +147,11 @@ public class sqlPermissionsPermisionEditor {
                 return gID;
             }
 
-            query = "INSERT INTO perm_groups(name, world, def, prefix, sufix, build) VALUES('" + grp + "','" + world + "','" + def + "','" + prefix + "','" + sufix + "','" + build + "')";
+            query = "INSERT INTO perm_groups(name, world, def, prefix, sufix, build) VALUES('" + this.escapeString(grp) + "','" + world + "','" + def + "','" + prefix + "','" + sufix + "','" + build + "')";
             //System.out.println("[DEBUG] " + query);
             plugin.database.executeChangeQuery(query);
 
-            query = "SELECT id FROM perm_groups WHERE name='" + grp + "' AND world='" + world + "'";
+            query = "SELECT id FROM perm_groups WHERE name='" + this.escapeString(grp) + "' AND world='" + world + "'";
             //System.out.println("[DEBUG] " + query);
             res = plugin.database.executeQuery(query);
             int gID = -1;
@@ -195,23 +195,23 @@ public class sqlPermissionsPermisionEditor {
     }
 
     private int checkAndAddUser(String usr, int world, Configuration cfg) throws Exception {
-        String query = "SELECT id FROM perm_users WHERE login='" + usr + "' AND world='" + world + "'";
+        String query = "SELECT id FROM perm_users WHERE login='" + this.escapeString(usr) + "' AND world='" + world + "'";
         String[][] res = plugin.database.executeQuery(query);
         String grp = (String) cfg.getProperty("users." + usr + ".group");
         int grpID = checkAndAddGroup(grp, world, cfg);
         if (res.length > 0) {
-            query = "UPDATE perm_users SET login='" + usr + "', world='" + world + "', grp='" + grpID + "' WHERE id='" + res[0][0] + "'";
+            query = "UPDATE perm_users SET login='" + this.escapeString(usr) + "', world='" + world + "', grp='" + grpID + "' WHERE id='" + res[0][0] + "'";
             //System.out.println("[DEBUG] " + query);
             plugin.database.executeChangeQuery(query);
 
             return new Integer(res[0][0]);
         }
 
-        query = "INSERT INTO perm_users(login, world, grp) VALUES('" + usr + "','" + world + "','" + grpID + "')";
+        query = "INSERT INTO perm_users(login, world, grp) VALUES('" + this.escapeString(usr) + "','" + world + "','" + grpID + "')";
         //System.out.println("[DEBUG] " + query);
         plugin.database.executeChangeQuery(query);
 
-        query = "SELECT id FROM perm_users WHERE login='" + usr + "' AND world='" + world + "'";
+        query = "SELECT id FROM perm_users WHERE login='" + this.escapeString(usr) + "' AND world='" + world + "'";
         //System.out.println("[DEBUG] " + query);
         res = plugin.database.executeQuery(query);
         if (res.length > 0) {
@@ -223,23 +223,23 @@ public class sqlPermissionsPermisionEditor {
     private int checkAndAddWorld(String world, Configuration cfg) throws Exception {
         int ret = -1;
         try {
-            String query = "SELECT id FROM perm_worlds WHERE world='" + world + "'";
+            String query = "SELECT id FROM perm_worlds WHERE world='" + this.escapeString(world) + "'";
             String[][] res = plugin.database.executeQuery(query);
 
             String copies = (String) cfg.getProperty("plugin.permissions.copies");
             String system = (String) cfg.getProperty("plugin.permissions.system");
 
             if (res.length > 0) {
-                query = "UPDATE perm_worlds SET world='" + world + "', copies='" + copies + "', system='" + system + "' WHERE id='" + res[0][0] + "'";
+                query = "UPDATE perm_worlds SET world='" + this.escapeString(world) + "', copies='" + this.escapeString(copies) + "', system='" + this.escapeString(system) + "' WHERE id='" + res[0][0] + "'";
                 plugin.database.executeChangeQuery(query);
 
                 return new Integer(res[0][0]);
             }
 
-            query = "INSERT INTO perm_worlds(world, copies, system) VALUES('" + world + "','" + copies + "','" + system + "')";
+            query = "INSERT INTO perm_worlds(world, copies, system) VALUES('" + this.escapeString(world) + "','" + this.escapeString(copies) + "','" + this.escapeString(system) + "')";
             plugin.database.executeChangeQuery(query);
 
-            query = "SELECT id FROM perm_worlds WHERE world='" + world + "'";
+            query = "SELECT id FROM perm_worlds WHERE world='" + this.escapeString(world) + "'";
             res = plugin.database.executeQuery(query);
 
             if (res.length > 0) {
@@ -255,16 +255,16 @@ public class sqlPermissionsPermisionEditor {
 
     private void checkAndAddPerm(String perm, int grp, Configuration cfg) throws Exception {
         try {
-            String query = "SELECT id FROM perm_permissions WHERE name='" + perm + "'";
+            String query = "SELECT id FROM perm_permissions WHERE name='" + this.escapeString(perm) + "'";
             String[][] res = plugin.database.executeQuery(query);
             int permID = 0;
             if (res.length > 0) {
                 permID = new Integer(res[0][0]);
             } else {
-                query = "INSERT INTO perm_permissions(name) VALUES('" + perm + "')";
+                query = "INSERT INTO perm_permissions(name) VALUES('" + this.escapeString(perm) + "')";
                 plugin.database.executeChangeQuery(query);
 
-                query = "SELECT id FROM perm_permissions WHERE name='" + perm + "'";
+                query = "SELECT id FROM perm_permissions WHERE name='" + this.escapeString(perm) + "'";
                 res = plugin.database.executeQuery(query);
                 if (res.length > 0) {
                     permID = new Integer(res[0][0]);
@@ -289,16 +289,16 @@ public class sqlPermissionsPermisionEditor {
 
     private void checkAndAddPermUsr(String perm, int usr, Configuration cfg) throws Exception {
         try {
-            String query = "SELECT id FROM perm_permissions WHERE name='" + perm + "'";
+            String query = "SELECT id FROM perm_permissions WHERE name='" + this.escapeString(perm) + "'";
             String[][] res = plugin.database.executeQuery(query);
             int permID = 0;
             if (res.length > 0) {
                 permID = new Integer(res[0][0]);
             } else {
-                query = "INSERT INTO perm_permissions(name) VALUES('" + perm + "')";
+                query = "INSERT INTO perm_permissions(name) VALUES('" + this.escapeString(perm) + "')";
                 plugin.database.executeChangeQuery(query);
 
-                query = "SELECT id FROM perm_permissions WHERE name='" + perm + "'";
+                query = "SELECT id FROM perm_permissions WHERE name='" + this.escapeString(perm) + "'";
                 res = plugin.database.executeQuery(query);
                 if (res.length > 0) {
                     permID = new Integer(res[0][0]);
@@ -430,7 +430,7 @@ public class sqlPermissionsPermisionEditor {
 
             //Get User Permissions
             List<String> userPermList = new ArrayList<String>();
-            String[][] userPermArr = plugin.database.executeQuery("SELECT p.name FROM perm_user_to_perm up, perm_permissions p WHERE up.usrID='" + +userID + "' AND up.permID=p.id");
+            String[][] userPermArr = plugin.database.executeQuery("SELECT p.name FROM perm_user_to_perm up, perm_permissions p WHERE up.usrID='" + userID + "' AND up.permID=p.id");
             for (String[] usPerm : userPermArr) {
                 userPermList.add(usPerm[0]);
             }
@@ -440,6 +440,12 @@ public class sqlPermissionsPermisionEditor {
             }
             cfg.save();
         }
+    }
 
+    private String escapeString(String str)
+    {
+        str.replaceAll("\'", "\\'");
+        str.replaceAll("\"", "\\\"");
+        return str;
     }
 }
