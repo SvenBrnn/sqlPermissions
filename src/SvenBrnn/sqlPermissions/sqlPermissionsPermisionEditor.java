@@ -41,42 +41,46 @@ public class sqlPermissionsPermisionEditor {
         int worldID = checkAndAddWorld(world, cfg);
         //System.out.println("[sqlPermissions][DEBUG] World is in DB now!");
         List groupList = cfg.getKeys("groups");
-        Iterator groups = groupList.iterator();
-        while (groups.hasNext()) {
-            Object grp = (String) groups.next();
-            int grpID;
-            grpID = checkAndAddGroup((String) grp, worldID, cfg);
-            if (grpID != -1) {
-                List permList = cfg.getList("groups." + grp + ".permissions");
-                if (permList != null) {
-                    Iterator perms = permList.iterator();
-                    String query = "DELETE FROM perm_grp_to_perm WHERE grpID='" + grpID + "'";
-                    plugin.database.executeChangeQuery(query);
-                    while (perms.hasNext()) {
-                        Object perm = (String) perms.next();
-                        checkAndAddPerm((String) perm, grpID, cfg);
+        if (groupList != null) {
+            Iterator groups = groupList.iterator();
+            while (groups.hasNext()) {
+                Object grp = (String) groups.next();
+                int grpID;
+                grpID = checkAndAddGroup((String) grp, worldID, cfg);
+                if (grpID != -1) {
+                    List permList = cfg.getList("groups." + grp + ".permissions");
+                    if (permList != null) {
+                        Iterator perms = permList.iterator();
+                        String query = "DELETE FROM perm_grp_to_perm WHERE grpID='" + grpID + "'";
+                        plugin.database.executeChangeQuery(query);
+                        while (perms.hasNext()) {
+                            Object perm = (String) perms.next();
+                            checkAndAddPerm((String) perm, grpID, cfg);
+                        }
+                        //System.out.println("[sqlPermissions][DEBUG] Group " + grp + " is in DB now!");
                     }
-                    //System.out.println("[sqlPermissions][DEBUG] Group " + grp + " is in DB now!");
                 }
             }
         }
 
         List userList = cfg.getKeys("users");
-        Iterator users = userList.iterator();
-        while (users.hasNext()) {
-            String usr = (String) users.next();
-            int usrID = checkAndAddUser(usr, worldID, cfg);
-            if (usrID != -1) {
-                List permList = cfg.getList("users." + usr + ".permissions");
-                if (permList != null) {
-                    Iterator perms = permList.iterator();
+        if (userList != null) {
+            Iterator users = userList.iterator();
+            while (users.hasNext()) {
+                String usr = (String) users.next();
+                int usrID = checkAndAddUser(usr, worldID, cfg);
+                if (usrID != -1) {
+                    List permList = cfg.getList("users." + usr + ".permissions");
+                    if (permList != null) {
+                        Iterator perms = permList.iterator();
 
-                    String query = "DELETE FROM perm_user_to_perm WHERE usrID='" + usrID + "'";
-                    plugin.database.executeChangeQuery(query);
+                        String query = "DELETE FROM perm_user_to_perm WHERE usrID='" + usrID + "'";
+                        plugin.database.executeChangeQuery(query);
 
-                    while (perms.hasNext()) {
-                        Object perm = (String) perms.next();
-                        checkAndAddPermUsr((String) perm, usrID, cfg);
+                        while (perms.hasNext()) {
+                            Object perm = (String) perms.next();
+                            checkAndAddPermUsr((String) perm, usrID, cfg);
+                        }
                     }
                 }
             }
