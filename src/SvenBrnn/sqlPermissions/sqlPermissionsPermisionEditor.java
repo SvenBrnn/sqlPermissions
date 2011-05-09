@@ -327,7 +327,7 @@ public class sqlPermissionsPermisionEditor {
         String worldFile = "plugins/Permissions/" + world + ".yml";
         File fi = new File(worldFile);
         //Check if world is in DB
-        String[][] worldArr = plugin.database.executeQuery("SELECT * FROM perm_worlds WHERE world='" + world + "'");
+        String[][] worldArr = plugin.database.executeQuery("SELECT * FROM perm_worlds WHERE world='" + this.escapeString(world) + "'");
         if (worldArr.length == 0) {
             System.out.println("[sqlPermissions] World " + world + " does not exist in db!");
             if (fi.exists()) {

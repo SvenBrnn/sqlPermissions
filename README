@@ -29,6 +29,8 @@ FUNCTIONS:
 - Checks the DB and Files every 5 minutes for changes
 
 CHANGELOG:
+Version 0.2c:
+- Fixed error when World has a  " ' " in its name
 Version 0.2b:
 - Fixed error when Group permissions = null
 Version 0.2:
