@@ -24,7 +24,7 @@ if(isset($_POST['submit']))
     $pass = $db->cleanStatement($_POST['password']);
     $query = "SELECT * FROM perm_webusers WHERE username='".$user."' AND password=md5('".$pass."')";
     $db->query($query);
-    echo $query;
+    //echo $query;
     if($db->getNumRows() > 0)
     {
         $res = $db->fetchObject();
