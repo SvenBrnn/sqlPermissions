@@ -29,6 +29,11 @@ FUNCTIONS:
 - Checks the DB and Files every 5 minutes for changes
 
 CHANGELOG:
+Version 0.2b:
+- Fixed error when Group permissions = null
+Version 0.2:
+-Corrected string excaping when Reading the permission configs
+-Removed one Debug on Webpage
 Version 0.1:
 - init the Plugin
 
