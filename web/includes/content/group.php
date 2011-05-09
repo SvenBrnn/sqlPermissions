@@ -169,6 +169,8 @@ function edit_group() {
                 $qu .= "prefix='" . $db->cleanStatement($_POST['gPrefix']) . "', ";
                 $qu .= "build='" . $db->cleanStatement($_POST['gBuild']) . "', ";
                 $qu .= "world='" . $db->cleanStatement($_POST['gWorld']) . "' ";
+                if ($db->cleanStatement($_POST['gRank']) != "")
+                    $qu .= ",rank='" . $db->cleanStatement($_POST['gRank']) . "' ";
                 $qu .= "WHERE id='" . $db->cleanStatement($_POST['gId']) . "'";
                 $db->query($qu);
                 $error .= $db->getError();
@@ -192,14 +194,19 @@ function edit_group() {
                 $db->query("SELECT * FROM perm_groups WHERE name='" . $db->cleanStatement($_POST['gName']) . "' AND world='" . $db->cleanStatement($_POST['gWorld']) . "'");
                 if ($db->getNumRows() != null)
                     $error = $_POST['gName'] . " already exists in " . $_POST['gWorld'] . "!";
-            }           
+            }
             if ($error == "") {
-                $qu = "INSERT INTO perm_groups(name, def, sufix, prefix, build, world) VALUES( ";
+                if ($db->cleanStatement($_POST['gRank']) != "")
+                    $qu = "INSERT INTO perm_groups(name, def, sufix, prefix, build, rank, world) VALUES( ";
+                else
+                    $qu = "INSERT INTO perm_groups(name, def, sufix, prefix, build, world) VALUES( ";
                 $qu .= "'" . $db->cleanStatement($_POST['gName']) . "', ";
                 $qu .= "'" . $db->cleanStatement($_POST['gDefault']) . "', ";
                 $qu .= "'" . $db->cleanStatement($_POST['gSufix']) . "', ";
                 $qu .= "'" . $db->cleanStatement($_POST['gPrefix']) . "', ";
                 $qu .= "'" . $db->cleanStatement($_POST['gBuild']) . "', ";
+                if ($db->cleanStatement($_POST['gRank']) != "")
+                    $qu .= "'" . $db->cleanStatement($_POST['gRank']) . "',";
                 $qu .= "'" . $db->cleanStatement($_POST['gWorld']) . "')";
                 //$error = $qu;
                 $db->query($qu);
@@ -253,6 +260,7 @@ function edit_group() {
         $s->assign('gWorld', $res->world);
         $s->assign('gDefault', $res->def);
         $s->assign('gBuild', $res->build);
+        $s->assign('gRank', $res->rank);
 
         $db->query("SELECT * FROM perm_instances WHERE grpID='" . $db->cleanStatement($_GET['itemid']) . "'");
         $inst = $db->fetchObjectList();
@@ -277,6 +285,7 @@ function edit_group() {
         $s->assign('gWorld', '');
         $s->assign('gDefault', 'false');
         $s->assign('gBuild', 'false');
+        $s->assign('gRank', '');
         for ($i = 0; $i < count($grps); $i++) {
             $instArr[$i] = array(
                 'gName' => $grps[$i]->name,
@@ -292,6 +301,7 @@ function edit_group() {
         $s->assign('gWorld', $_POST['gWorld']);
         $s->assign('gDefault', $_POST['gDefault']);
         $s->assign('gBuild', $_POST['gBuild']);
+        $s->assign('gRank', $_POST['gRank']);
         for ($i = 0; $i < count($grps); $i++) {
             $instArr[$i] = array(
                 'gName' => $grps[$i]->name,

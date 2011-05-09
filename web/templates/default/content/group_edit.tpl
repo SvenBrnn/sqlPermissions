@@ -63,6 +63,10 @@
                 </td>
             </tr>
             <tr>
+                <td width="150">Group Rank (permissionPlus):</td>
+                <td><input name="gRank" type="text" value="{$gRank}" /></td>
+            </tr>
+            <tr>
                 <td width="150"><input type="hidden" value="{$gId}" name="gId" /></td>
                 <td><input type="submit" name="submit" value="Save" /></td>
             </tr>
