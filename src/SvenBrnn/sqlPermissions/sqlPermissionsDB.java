@@ -65,6 +65,9 @@ public class sqlPermissionsDB {
     public String[][] executeQuery(String query)
             throws SQLException, ClassNotFoundException {
         //conOpen();
+        if (con == null) {
+            conOpen();
+        }
         st = (Statement) con.createStatement();
         rs = st.executeQuery(query);
         ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
@@ -94,6 +97,9 @@ public class sqlPermissionsDB {
 
     public void executeChangeQuery(String query)
             throws SQLException, ClassNotFoundException {
+        if (con == null) {
+            conOpen();
+        }
         st = (Statement) con.createStatement();
         st.executeUpdate(query);
     }
@@ -229,9 +235,9 @@ public class sqlPermissionsDB {
     }
 
     private void updateFrom01To02() throws SQLException, ClassNotFoundException {
-            System.out.println("[sqlPermissions] Updating Database from 0.1 to 0.2!");
-            String query = "ALTER TABLE perm_groups add rank int(11)";
-            executeChangeQuery(query);
-            executeChangeQuery("UPDATE perm_config SET value='0.2' WHERE param='sqlVersion'");
+        System.out.println("[sqlPermissions] Updating Database from 0.1 to 0.2!");
+        String query = "ALTER TABLE perm_groups add rank int(11)";
+        executeChangeQuery(query);
+        executeChangeQuery("UPDATE perm_config SET value='0.2' WHERE param='sqlVersion'");
     }
 }

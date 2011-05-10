@@ -48,11 +48,11 @@ public class sqlPermissionsPermisionEditor {
                 int grpID;
                 grpID = checkAndAddGroup((String) grp, worldID, cfg);
                 if (grpID != -1) {
+                    String query = "DELETE FROM perm_grp_to_perm WHERE grpID='" + grpID + "'";
+                    plugin.database.executeChangeQuery(query);
                     List permList = cfg.getList("groups." + grp + ".permissions");
                     if (permList != null) {
                         Iterator perms = permList.iterator();
-                        String query = "DELETE FROM perm_grp_to_perm WHERE grpID='" + grpID + "'";
-                        plugin.database.executeChangeQuery(query);
                         while (perms.hasNext()) {
                             Object perm = (String) perms.next();
                             checkAndAddPerm((String) perm, grpID, cfg);
@@ -70,13 +70,11 @@ public class sqlPermissionsPermisionEditor {
                 String usr = (String) users.next();
                 int usrID = checkAndAddUser(usr, worldID, cfg);
                 if (usrID != -1) {
+                    String query = "DELETE FROM perm_user_to_perm WHERE usrID='" + usrID + "'";
+                    plugin.database.executeChangeQuery(query);
                     List permList = cfg.getList("users." + usr + ".permissions");
                     if (permList != null) {
                         Iterator perms = permList.iterator();
-
-                        String query = "DELETE FROM perm_user_to_perm WHERE usrID='" + usrID + "'";
-                        plugin.database.executeChangeQuery(query);
-
                         while (perms.hasNext()) {
                             Object perm = (String) perms.next();
                             checkAndAddPermUsr((String) perm, usrID, cfg);
@@ -101,7 +99,7 @@ public class sqlPermissionsPermisionEditor {
             }
             String instance;
             Object ins = cfg.getProperty("groups." + grp + ".inheritance");
-            String rank = (String) cfg.getProperty("groups." + grp + ".rank");
+            String rank = cfg.getString("groups." + grp + ".rank");
             String sufix = (String) cfg.getProperty("groups." + grp + ".info.sufix");
             String prefix = (String) cfg.getProperty("groups." + grp + ".info.prefix");
             Boolean buildBool = (Boolean) cfg.getProperty("groups." + grp + ".info.build");
@@ -404,7 +402,7 @@ public class sqlPermissionsPermisionEditor {
             } else {
                 cfg.setProperty("groups." + groupArr[i][2] + ".info.build", false);
             }
-            if (groupArr[i][7]!=null && !groupArr[i][7].equals("")) {
+            if (groupArr[i][7] != null && !groupArr[i][7].equals("")) {
                 cfg.setProperty("groups." + groupArr[i][2] + ".rank", new Integer(groupArr[i][7]));
             }
 

@@ -50,7 +50,7 @@ public class sqlPermissionsConfig {
         sqlPassword = (String) config.getProperty("config.mysql.password");
         sqlDatabase = (String) config.getProperty("config.mysql.database");
 
-        if (cfgVersion != null && cfgVersion.equals("0.1")) {
+        if (cfgVersion != null && (cfgVersion.equals("0.1") || cfgVersion.equals("0.2") || cfgVersion.equals("0.3") || cfgVersion.equals("0.4"))) {
             updateVersion();
         }
         if (cfgVersion == null || sqlHost == null || sqlPort == null || sqlUser == null || sqlPassword == null || sqlDatabase == null) {
@@ -92,7 +92,7 @@ public class sqlPermissionsConfig {
 
     private void updateVersion() {
         config.load();
-        config.setProperty("config.configVersion", "0.2");
+        config.setProperty("config.configVersion", "0.5");
         config.save();
     }
 }
