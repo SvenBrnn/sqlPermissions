@@ -35,6 +35,7 @@ public class sqlPermissionsPermisionEditor {
         String copys = (String) cfg.getProperty("plugin.permissions.copies");
         if (copys != null && !copys.equals("null") && !copys.equals("")) {
             //System.out.println("[sqlPermissions][DEBUG] " + world + " Copies " + copys + "!");
+            checkAndAddWorld(world, cfg);
             return;
         }
 
