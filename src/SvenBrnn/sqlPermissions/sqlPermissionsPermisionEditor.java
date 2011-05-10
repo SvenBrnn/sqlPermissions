@@ -101,7 +101,7 @@ public class sqlPermissionsPermisionEditor {
             String instance;
             Object ins = cfg.getProperty("groups." + grp + ".inheritance");
             String rank = cfg.getString("groups." + grp + ".rank");
-            String sufix = (String) cfg.getProperty("groups." + grp + ".info.sufix");
+            String sufix = (String) cfg.getProperty("groups." + grp + ".info.suffix");
             String prefix = (String) cfg.getProperty("groups." + grp + ".info.prefix");
             Boolean buildBool = (Boolean) cfg.getProperty("groups." + grp + ".info.build");
             String build;
@@ -394,9 +394,9 @@ public class sqlPermissionsPermisionEditor {
                 cfg.setProperty("groups." + groupArr[i][2] + ".info.prefix", groupArr[i][4]);
             }
             if (groupArr[i][5].equals("null")) {
-                cfg.setProperty("groups." + groupArr[i][2] + ".info.sufix", "");
+                cfg.setProperty("groups." + groupArr[i][2] + ".info.suffix", "");
             } else {
-                cfg.setProperty("groups." + groupArr[i][2] + ".info.sufix", groupArr[i][5]);
+                cfg.setProperty("groups." + groupArr[i][2] + ".info.suffix", groupArr[i][5]);
             }
             if (groupArr[i][6].equals("true")) {
                 cfg.setProperty("groups." + groupArr[i][2] + ".info.build", true);
