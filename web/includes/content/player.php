@@ -45,6 +45,7 @@ function delete_player() {
         return -1;
 
     $pID = $db->cleanStatement($pID);
+    $db->query("DELETE FROM perm_user_to_perm WHERE usrID='" . $pID . "'");
     $db->query("DELETE FROM perm_users WHERE id='" . $pID . "'");
     setDBChanged();
     //exit($db->getError());
