@@ -149,7 +149,7 @@ function edit_player_perm() {
     $s = new Smarty();
     $s->assign("perms", $userPerms);
     $s->assign("item", $pID);
-    $tpl = $s->fetch(TEMPLATE_DIR . DS . TEMPLATE . DS . CONTENT_DIR . DS . 'group_perm.tpl');
+    $tpl = $s->fetch(TEMPLATE_DIR . DS . TEMPLATE . DS . CONTENT_DIR . DS . 'player_perm.tpl');
     return $tpl;
 }
 
