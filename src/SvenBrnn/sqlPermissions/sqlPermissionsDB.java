@@ -43,7 +43,7 @@ public class sqlPermissionsDB {
 
     public void conOpen()
             throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName(plugin.config.getSQLDriver());
         con = (Connection) DriverManager.getConnection("jdbc:mysql://" + plugin.config.getSQLHost() + ":" + plugin.config.getSQLPort() + "/" + plugin.config.getSQLDatabase(), plugin.config.getSQLUser(), plugin.config.getSQLPassword());
     }
 

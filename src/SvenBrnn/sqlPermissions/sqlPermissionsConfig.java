@@ -24,6 +24,7 @@ public class sqlPermissionsConfig {
     private Configuration config;
     private String file;
     private File cfgFile;
+    private String sqlDriver;
 
     sqlPermissionsConfig(sqlPermissions plugin) {
         this.plugin = plugin;
@@ -49,9 +50,17 @@ public class sqlPermissionsConfig {
         sqlUser = (String) config.getProperty("config.mysql.user");
         sqlPassword = (String) config.getProperty("config.mysql.password");
         sqlDatabase = (String) config.getProperty("config.mysql.database");
+        sqlDriver = (String) config.getProperty("config.mysql.driver");
+
+        if(sqlDriver == null)
+            sqlDriver = "com.mysql.jdbc.Driver";
 
         if (cfgVersion != null && (cfgVersion.equals("0.1") || cfgVersion.equals("0.2") || cfgVersion.equals("0.3") || cfgVersion.equals("0.4"))) {
             updateVersion();
+        }
+        if(cfgVersion != null && cfgVersion.equals("0.5"))
+        {
+
         }
         if (cfgVersion == null || sqlHost == null || sqlPort == null || sqlUser == null || sqlPassword == null || sqlDatabase == null) {
             System.out.println("[sqlPermissions] Error in config file.");
@@ -60,12 +69,13 @@ public class sqlPermissionsConfig {
     }
 
     private void createConfig() {
-        config.setProperty("config.configVersion", "0.2");
+        config.setProperty("config.configVersion", "0.6");
         config.setProperty("config.mysql.host", "localhost");
         config.setProperty("config.mysql.port", "3306");
         config.setProperty("config.mysql.user", "permissions");
         config.setProperty("config.mysql.password", "changeme");
         config.setProperty("config.mysql.database", "permissions");
+        config.setProperty("config.mysql.driver", "com.mysql.jdbc.Driver");
         config.setProperty("config.i.have.set.the.mysql.data", false);
         config.save();
     }
@@ -90,9 +100,20 @@ public class sqlPermissionsConfig {
         return sqlDatabase;
     }
 
+    public String getSQLDriver() {
+        return sqlDriver;
+    }
+
     private void updateVersion() {
         config.load();
         config.setProperty("config.configVersion", "0.5");
+        config.save();
+    }
+
+    private void updateVersion2() {
+        config.load();
+        config.setProperty("config.configVersion", "0.6");
+        config.setProperty("config.mysql.driver", "com.mysql.jdbc.Driver");
         config.save();
     }
 }
